@@ -1,15 +1,16 @@
 <html>
-    <body>
+    <body style="background: yellow; font-family: Arial, Helvetica, sans-serif" >
 {% if name %}
-<h1> Kya dekhra re {{name}} </h1>
+<h1 style="color:red"> Kya dekhra re {{name}} </h1>
 {%else%}
 <h1> Dekh ba </h1>
     {% endif %}
-    <ul>
-      {% for order in orders %}
-      <li> {{ order.id }} ${{ order.customer.first_name }}  </li>
+    <!--{{ result }}-->
+     <ul>
+      {% for cust in tags %}
+      <li>  {{ cust.first_name }}  </li>
       {% endfor %}
     </ul>
    </body>
-</html>
+</html> 
 
