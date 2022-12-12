@@ -52,10 +52,14 @@ class Customer(models.Model):
     phone=models.CharField(max_length=254)
     birth_date=models.DateField(null=True)
     membership=models.CharField(max_length=1,choices=membership_choices,default=membership_bronze)
+    # order=models.ManyToManyField(Order,on_delete=models.PROTECT)
     def __str__(self):
         return self.first_name
     # class Meta:
     #     ordering=['first_name']
+
+    #   def en_title(self, obj):
+    #     return obj.post.get(post=obj.id, language="en")
 
 class Order(models.Model):
     PAYMENT_STATUS_PENDING='P'
@@ -68,6 +72,8 @@ class Order(models.Model):
     placed_at=models.DateTimeField(auto_now_add=True)
     PAYMENT_STATUS=models.CharField(max_length=1,choices=PAYMENT_STATUS_CHOICES,default=PAYMENT_STATUS_PENDING)
     customer=models.ForeignKey(Customer,on_delete=models.PROTECT)
+    def __str__(self):
+        return str(self.placed_at)
     
 
 class OrderItem(models.Model):
