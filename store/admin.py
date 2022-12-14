@@ -1,9 +1,11 @@
 from django.db.models.aggregates import Count
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericTabularInline
 from django.urls import reverse
 from django.utils.html import format_html,urlencode
 from . import models
 from store.models import Order,OrderItem,Customer
+from tags.models import TaggedItem
 from django.db.models import Q,F,Func,Value,ExpressionWrapper,DecimalField 
 from django.db.models.functions import Concat
 
@@ -17,10 +19,14 @@ class InventoryFilter(admin.SimpleListFilter):
     def queryset(self, request,queryset): 
         if(self.value()=='<10'):
             return queryset.filter(inventory__lt=10)
-
+class TagInline(GenericTabularInline):
+    model=TaggedItem
+    autocomplete_fields=['tag']
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
+    search_fields=['title']
+    inlines=[TagInline]
     autocomplete_fields=['collection']
     prepopulated_fields={
         'slug':['title']
@@ -46,11 +52,20 @@ class ProductAdmin(admin.ModelAdmin):
         if(product.inventory<10):
             return 'Low'
         return 'OK'
+class OrderItemInline(admin.StackedInline):
+    model=models.OrderItem
+    autocomplete_fields=['product']
+    min_num=1
+    max_num =10
+    extra=0
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display=['id','placed_at','customer']
     autocomplete_fields=['customer']
+    inlines=[OrderItemInline]    
+    list_display=['id','placed_at','customer']
+    
+    
 class CustomerAdmin(admin.ModelAdmin):
     list_display=['first_name','last_name','membership','orders']
     list_editable=['membership']
