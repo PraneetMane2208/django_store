@@ -1,11 +1,11 @@
 from django.db.models.aggregates import Count
 from django.contrib import admin
-from django.contrib.contenttypes.admin import GenericTabularInline
+
 from django.urls import reverse
 from django.utils.html import format_html,urlencode
 from . import models
 from store.models import Order,OrderItem,Customer
-from tags.models import TaggedItem
+
 from django.db.models import Q,F,Func,Value,ExpressionWrapper,DecimalField 
 from django.db.models.functions import Concat
 
@@ -19,14 +19,12 @@ class InventoryFilter(admin.SimpleListFilter):
     def queryset(self, request,queryset): 
         if(self.value()=='<10'):
             return queryset.filter(inventory__lt=10)
-class TagInline(GenericTabularInline):
-    model=TaggedItem
-    autocomplete_fields=['tag']
+
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     search_fields=['title']
-    inlines=[TagInline]
+    # inlines=[TagInline]
     autocomplete_fields=['collection']
     prepopulated_fields={
         'slug':['title']
