@@ -104,6 +104,7 @@ admin.site.register(models.Customer,CustomerAdmin)
 class collectionAdmin(admin.ModelAdmin):
     list_display=['title','products_count']
     search_fields=['title']
+    autocomplete_fields=['feature_product']
     @admin.display(ordering='products_count')
     def products_count(self,collection):
         # reverse('admin:app_model_page')
