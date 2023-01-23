@@ -17,7 +17,7 @@ class productSerializer(serializers.ModelSerializer):
         model=Product
         # fields='__all__'  # It is bad practise we dont want to display all internal
                                # information to external users
-        fields=['id','title','price','price_with_tax','collection']
+        fields=['id','title','slug','description','price','inventory','price_with_tax','collection']
     # id=serializers.IntegerField()
     # title=serializers.CharField(max_length=250)
     price=serializers.DecimalField(max_digits=6,decimal_places=2,source='unit_price')
@@ -34,3 +34,17 @@ class productSerializer(serializers.ModelSerializer):
 
     def calculate_tax(self,product):
         return product.unit_price * Decimal(1.5)
+
+   # BOTH MTDS CREATE AND UPDATE IS AUTOMATICALLY CREATED BY DJANGO SO NO NEED TO 
+   # OVERWRITE IT
+   
+    # def create(self, validated_data):
+    #     product=Product(**validated_data)  # It unpacks dictionary
+    #     product.other=1
+    #     product.save()
+    #     return product
+        
+    # def update(self, instance, validated_data):
+    #     instance.unit_price=validated_data.get('unit_price')
+    #     instance.save()
+    #     return instance
