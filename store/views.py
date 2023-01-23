@@ -8,13 +8,17 @@ from .serializers import productSerializer,CollectionSerializer
 
 # def product_list(request):
 #     return HttpResponse('ok')
-@api_view()
+@api_view(['GET','POST'])
 def product_list(request):
-    queryset=Product.objects.select_related('collection').all()
-    serializer=productSerializer(queryset,many=True,context={'request':request})
+    if request.method=='GET':
+        queryset=Product.objects.select_related('collection').all()
+        serializer=productSerializer(queryset,many=True,context={'request':request})
 
-    # we have set many=True bcz iterate and we want to convert each product obj to dictionary
-    return Response(serializer.data)
+        # we have set many=True bcz iterate and we want to convert each product obj to dictionary
+        return Response(serializer.data)
+    elif request.method=='POST':
+        serializer=productSerializer(data=request.data)
+        return Response('ok')
 
 @api_view()
 def product_detail(request,id):
