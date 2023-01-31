@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from store.models import Product,Collection
+from store.models import Product,Collection,Review
 from decimal import Decimal
 
 
@@ -50,4 +50,8 @@ class productSerializer(serializers.ModelSerializer):
     #     instance.save()
     #     return instance
 
- 
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Review
+        fields=['id','date','name','description','product']
+        
