@@ -8,6 +8,7 @@ from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIVi
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from .models import Product,Collection,OrderItem,Review
+from.filters import ProductFilter
 from .serializers import productSerializer,CollectionSerializer,ReviewSerializer
 from django.db.models.aggregates import Count
 
@@ -22,15 +23,17 @@ class ReviewViewSet(ModelViewSet):
         return {'product_id': self.kwargs['product_pk']}
 
 class ProductViewSet(ModelViewSet):
-    # queryset=Product.objects.all()
+    queryset=Product.objects.all()
     serializer_class=productSerializer
-
-    def get_queryset(self):
-        queryset=Product.objects.all()
-        collection_id=self.request.query_params.get('collection_id')
-        if collection_id is not None:
-            queryset=queryset.filter(collection_id=collection_id)
-        return queryset
+    filter_backends=[DjangoFilterBackend]
+    # filterset_fields=['collection_id','unit_price']
+    filterset_class=ProductFilter
+    # def get_queryset(self):
+    #     queryset=Product.objects.all()
+    #     collection_id=self.request.query_params.get('collection_id')
+    #     if collection_id is not None:
+    #         queryset=queryset.filter(collection_id=collection_id)
+    #     return queryset
 
     def get_serializer_context(self):
         return {'request':self.request}
