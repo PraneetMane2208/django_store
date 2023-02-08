@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'store',
     'tags',
-    'store_custom',
-    'likes'
+    'likes',
+    'core'
 ]
 
 MIDDLEWARE = [
@@ -144,3 +144,5 @@ REST_FRAMEWORK={
     # 'PAGE_SIZE':10
     # 'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination'
 }
+
+AUTH_USER_MODEL='core.User'

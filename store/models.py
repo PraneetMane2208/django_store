@@ -1,9 +1,11 @@
 from email.policy import default
 from enum import auto
+from django.conf import settings
 from turtle import title
 from unicodedata import decimal
 from unittest.util import _MAX_LENGTH
 from django.db import models
+from django.contrib import admin
 from django.core.validators import MinValueValidator
 from uuid import uuid4
 
@@ -52,17 +54,24 @@ class Customer(models.Model):
           (membership_gold,'Gold')
     ]
 
-    first_name=models.CharField(max_length=254)
-    last_name=models.CharField(max_length=254)
-    email=models.EmailField(unique=True)
+    
     phone=models.CharField(max_length=254)
     birth_date=models.DateField(null=True)
     membership=models.CharField(max_length=1,choices=membership_choices,default=membership_bronze)
     # order=models.ManyToManyField(Order,on_delete=models.PROTECT)
+    user=models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+
     def __str__(self):
-        return self.first_name
-    # class Meta:
-    #     ordering=['first_name']
+        return self.user.first_name
+    class Meta:
+         ordering=['user__first_name']
+    @admin.display(ordering='user__first_name')
+    def first_name(self):
+        return self.user.first_name
+
+    @admin.display(ordering='user__last_name')
+    def last_name(self):
+        return self.user.last_name
 
     #   def en_title(self, obj):
     #     return obj.post.get(post=obj.id, language="en")
